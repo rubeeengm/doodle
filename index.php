@@ -12,12 +12,14 @@
         <div class="wrapper indexPage">
             <div class="mainSection">
                 <div class="logoContainer">
-                    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="">
+                    <img src="assets/images/doodleLogo.png" alt="">
                 </div>
     
                 <div class="searchContainer">
-                    <input type="text" class="searchBox" name="term" placeholder="Enter a search term...">
-                    <input type="submit" class="searchButton" value="Search">
+                    <form action="search.php" method="GET">
+                        <input type="text" class="searchBox" name="term">
+                        <input type="submit" class="searchButton" value="Search">
+                    </form>
                 </div>
             </div>
         </div>
