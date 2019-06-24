@@ -71,3 +71,63 @@ html, body {
 .logoContainer img {
     width: 100%;
 }
+
+/* Estilos search page */
+
+.header {
+    background-color: #FAFAFA;
+    border-bottom: 1px solid #EBEBEB;
+}
+
+.wrapper .headerContent {
+    display: flex;
+    align-items: center;
+}
+
+.headerContent .logoContainer{
+    width: 150px;
+    padding: 5px 20px;
+    box-sizing: border-box;
+}
+
+.headerContent .searchContainer {
+    flex: 1;
+}
+
+.headerContent .searchContainer form {
+    margin: 15px 0 28px 0;
+}
+
+.headerContent .searchBarContainer {
+    height: 44px;
+    border-radius: 2px;
+    background-color: #FFF;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    width: 70%;
+    max-width: 630px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.headerContent .searchBarContainer .searchBox {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    padding: 12px;
+    font-size: 16px;
+    color: #000;
+}
+
+.headerContent .searchBarContainer .searchButton {
+    background-color: #FFF;
+    height: 44px;
+    margin-top: 0;
+    width: 44px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.headerContent .searchBarContainer .searchButton img {
+    width: 22px;
+}

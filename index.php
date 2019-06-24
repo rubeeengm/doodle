@@ -14,7 +14,7 @@
                 <div class="logoContainer">
                     <img src="assets/images/doodleLogo.png" alt="">
                 </div>
-    
+
                 <div class="searchContainer">
                     <form action="search.php" method="GET">
                         <input type="text" class="searchBox" name="term">
