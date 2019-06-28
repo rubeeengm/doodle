@@ -1,9 +1,59 @@
 <?php
     include("classes/DomDocumentParser.php");
+    include("config.php");
+
     //enlaces que ya analizamos
     $alreadyCrawled = array();
     //enlaces que nos falta analizar
     $crawling = array();
+    //imagenes que ya encontramos
+    $alreadyFoundImages = array();
+
+    function linkExists($url) {
+        //para poder utilizar la variable con que se encuentra en config.php
+        global $con;
+
+        $query = $con->prepare(
+            "SELECT * FROM sites WHERE url = :url"
+        );
+
+        $query->bindParam(":url", $url);
+        $query->execute();
+
+        return $query->rowCount() != 0;
+    }
+
+    function insertLink($url, $title, $description, $keywords) {
+        //para poder utilizar la variable con que se encuentra en config.php
+        global $con;
+
+        $query = $con->prepare(
+            "INSERT INTO sites(url, title, description, keywords) VALUES (:url, :title, :description, :keywords)"
+        );
+
+        $query->bindParam(":url", $url);
+        $query->bindParam(":title", $title);
+        $query->bindParam(":description", $description);
+        $query->bindParam(":keywords", $keywords);
+
+        return $query->execute();
+    }
+
+    function insertImage($url, $src, $alt, $title) {
+        //para poder utilizar la variable con que se encuentra en config.php
+        global $con;
+
+        $query = $con->prepare(
+            "INSERT INTO images(siteUrl, imageUrl, alt, title) VALUES (:siteUrl, :imageUrl, :alt, :title)"
+        );
+
+        $query->bindParam(":siteUrl", $url);
+        $query->bindParam(":imageUrl", $src);
+        $query->bindParam(":alt", $alt);
+        $query->bindParam(":title", $title);
+
+        $query->execute();
+    }
 
     function createLink($src, $url) {
         $scheme = parse_url($url)["scheme"]; // http
@@ -25,6 +75,7 @@
     }
 
     function getDetails($url) {
+        global $alreadyFoundImages;
         $parser = new DomDocumentParser($url);
         $titleArray = $parser->getTitleTags();
 
@@ -54,10 +105,43 @@
             }
         }
 
+        //limpia las cadenas
         $description = str_replace("\n", "", $description);
         $keywords = str_replace("\n", "", $keywords);
 
-        echo "URL: $url, Title: $title, Description: $description, keywords: $keywords<br>";
+        //echo "URL: $url, Title: $title, Description: $description, keywords: $keywords<br>";
+        //verifica si existe el link
+        if (linkExists($url)) {
+            echo "$url already exists<br>";
+        } else if (insertLink($url, $title, $description, $keywords)) { //inserta el link en la base de datos
+            echo "SUCCESS: $url<br>";
+        } else {
+            echo "ERROR: Failed to insert $url<br>";
+        }
+
+        //obtiene todas la imagenes de la página web
+        $imageArray = $parser->getImages();
+
+        foreach($imageArray as $image) {
+            $src = $image->getAttribute("src");
+            $alt = $image->getAttribute("alt");
+            $title = $image->getAttribute("title");
+            
+            //si no contienen esos atributos los ignora
+            if (!$title && !$alt) {
+                continue;
+            }
+            
+            //transforma el enlace relativo a absoluto
+            $src = createLink($src, $url);
+
+            //si no ha sido encontrada la imagen la agrega al arreglo
+            if (!in_array($src, $alreadyFoundImages)) {
+                $alreadyFoundImages[] = $src;
+
+                insertImage($url, $src, $alt, $title);
+            }
+        }
     }
 
     //recuperad todos los enlaces de una página web de forma recursiva
@@ -86,7 +170,7 @@
                 $crawling[] = $href;
 
                 getDetails($href);
-            } else return;
+            }
         }
 
         //saca el primer elemento del array y lo retorna

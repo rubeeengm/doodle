@@ -16,7 +16,7 @@
         <div class="wrapper indexPage">
             <div class="mainSection">
                 <div class="logoContainer">
-                    <img src="assets/images/doodleLogo.png" alt="">
+                    <img src="assets/images/doodleLogo.png" title="Logo of our site" alt="Site logo">
                 </div>
 
                 <div class="searchContainer">
