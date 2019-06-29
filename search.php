@@ -34,7 +34,7 @@
                     <div class="searchContainer">
                         <form action="search.php" method="GET">
                             <div class="searchBarContainer">
-                                <input type="text" class="searchBox" name="term">
+                                <input type="text" class="searchBox" name="term" value ="<?php echo $term; ?>">
                                 <button class="searchButton">
                                     <img src="assets/images/search.png">
                                 </button>
@@ -68,7 +68,11 @@
                 <?php
                     $resultsProvider = new SiteResultsProvider($con);
 
-                    echo $resultsProvider->getNumResults($term);
+                    $numResults = $resultsProvider->getNumResults($term);
+
+                    echo "<p class='resultsCount'> $numResults results found </p>";
+
+                    echo $resultsProvider->getNumResultsHtml(1,20,$term);
                 ?>
             </div>
         </div>
