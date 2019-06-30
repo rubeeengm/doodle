@@ -9,6 +9,7 @@
     }
 
     $type = isset($_GET["type"]) ? $_GET["type"] : "sites";
+    $page = isset($_GET["page"]) ? $_GET["page"] : 1;
 ?>
 
 <!DOCTYPE html>
@@ -67,13 +68,50 @@
             <div class="mainResultsSection">
                 <?php
                     $resultsProvider = new SiteResultsProvider($con);
-
+                    $pageLimit = 20;
                     $numResults = $resultsProvider->getNumResults($term);
 
                     echo "<p class='resultsCount'> $numResults results found </p>";
 
-                    echo $resultsProvider->getNumResultsHtml(1,20,$term);
+                    echo $resultsProvider->getResultsHtml($page,$pageLimit,$term);
                 ?>
+            </div>
+
+            <div class="paginationContainer">
+                <div class="pageButtons">
+                    <div class="pageNumberContainer">
+                        <img src="assets/images/pageStart.png">
+                    </div>
+
+                    <?php
+                        $currentPage = 1;
+                        $pagesLeft = 10;
+
+                        while ($pagesLeft != 0) {
+                            if ($currentPage == $page) {
+                                echo "<div class='pageNumberContainer'>
+                                    <img src='assets/images/pageSelected.png'>
+                                    <span class='pageNumber'>$currentPage</span>
+                                  </div>";
+                            } else {
+                                echo "<div class='pageNumberContainer'>
+                                    <a href='search.php?term=$term&type=$type&page=$currentPage'>
+                                        <img src='assets/images/page.png'>
+                                        <span class='pageNumber'>$currentPage</span>
+                                    </a>
+                                  </div>";
+                            }
+
+
+                            $currentPage++;
+                            $pagesLeft--;
+                        }
+                    ?>
+
+                    <div class="pageNumberContainer">
+                        <img src="assets/images/pageEnd.png">
+                    </div>
+                </div>
             </div>
         </div>
     </body>
