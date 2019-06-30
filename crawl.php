@@ -8,53 +8,55 @@
     $crawling = array();
     //imagenes que ya encontramos
     $alreadyFoundImages = array();
-
+    //verifica si el link existe
     function linkExists($url) {
         //para poder utilizar la variable con que se encuentra en config.php
         global $con;
-
+        //recupera todas las ṕáginas que conincidan con la url
         $query = $con->prepare(
             "SELECT * FROM sites WHERE url = :url"
         );
-
+        //enlaza la varibale $url con el holder que se encuentra en la consulta
         $query->bindParam(":url", $url);
+        //ejecuta la consulta
         $query->execute();
 
+        //cunta el numero de filas que devolvió la consulto y regresa true si es igual con 0
         return $query->rowCount() != 0;
     }
-
+    //insertar links en la base de datos
     function insertLink($url, $title, $description, $keywords) {
         //para poder utilizar la variable con que se encuentra en config.php
         global $con;
-
+        //consulta que guarda los links en la base de datos
         $query = $con->prepare(
             "INSERT INTO sites(url, title, description, keywords) VALUES (:url, :title, :description, :keywords)"
         );
-
+        //enlaza las varibales con los holder que se encuentra en la consulta
         $query->bindParam(":url", $url);
         $query->bindParam(":title", $title);
         $query->bindParam(":description", $description);
         $query->bindParam(":keywords", $keywords);
-
+        //ejectura la consulta, devuelve falso si falla
         return $query->execute();
     }
-
+    //insertar links de imagenes en la base de datos
     function insertImage($url, $src, $alt, $title) {
         //para poder utilizar la variable con que se encuentra en config.php
         global $con;
-
+        //consulta que guarda imagenes en la base de datos
         $query = $con->prepare(
             "INSERT INTO images(siteUrl, imageUrl, alt, title) VALUES (:siteUrl, :imageUrl, :alt, :title)"
         );
-
+        //enlaza las varibales con los holder que se encuentra en la consulta
         $query->bindParam(":siteUrl", $url);
         $query->bindParam(":imageUrl", $src);
         $query->bindParam(":alt", $alt);
         $query->bindParam(":title", $title);
-
+        //ejecuta la consulta
         $query->execute();
     }
-
+    //transforma enlaces relativos a absolutos
     function createLink($src, $url) {
         $scheme = parse_url($url)["scheme"]; // http
         $host = parse_url($url)["host"]; // www.reecekenney.com
@@ -73,12 +75,14 @@
 
         return $src;
     }
-
+    //obtiene la información  de una url
     function getDetails($url) {
         global $alreadyFoundImages;
+        //dom de la página
         $parser = new DomDocumentParser($url);
+        //titulo de la página
         $titleArray = $parser->getTitleTags();
-
+        //si no tiene titulo ignora la url
         if (sizeof($titleArray) == 0 || $titleArray->item(0) == NULL) {
             return;
         }
@@ -126,12 +130,12 @@
             $src = $image->getAttribute("src");
             $alt = $image->getAttribute("alt");
             $title = $image->getAttribute("title");
-            
+
             //si no contienen esos atributos los ignora
             if (!$title && !$alt) {
                 continue;
             }
-            
+
             //transforma el enlace relativo a absoluto
             $src = createLink($src, $url);
 
