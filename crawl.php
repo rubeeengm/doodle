@@ -185,6 +185,6 @@
         }
     }
 
-    $startUrl = "http://www.bbc.com";
+    $startUrl = "http://www.proday.mx";
     followLinks($startUrl);
 ?>

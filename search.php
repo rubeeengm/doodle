@@ -68,12 +68,12 @@
             <div class="mainResultsSection">
                 <?php
                     $resultsProvider = new SiteResultsProvider($con);
-                    $pageLimit = 20;
+                    $pageSize = 20;
                     $numResults = $resultsProvider->getNumResults($term);
 
                     echo "<p class='resultsCount'> $numResults results found </p>";
 
-                    echo $resultsProvider->getResultsHtml($page,$pageLimit,$term);
+                    echo $resultsProvider->getResultsHtml($page, $pageSize, $term);
                 ?>
             </div>
 
@@ -84,10 +84,20 @@
                     </div>
 
                     <?php
-                        $currentPage = 1;
-                        $pagesLeft = 10;
+                        $pagesToShow = 10;
+                        $numPages = ceil($numResults / $pageSize);
+                        $pagesLeft = min($pagesToShow, $numPages);
+                        $currentPage = $page - floor($pagesToShow / 2);
 
-                        while ($pagesLeft != 0) {
+                        if ($currentPage < 1) {
+                            $currentPage = 1;
+                        }
+
+                        if ($currentPage + $pagesLeft > $numPages + 1) {
+                            $currentPage = $numPages + 1 - $pagesLeft;
+                        }
+
+                        while ($pagesLeft != 0 && $currentPage <= $numPages) {
                             if ($currentPage == $page) {
                                 echo "<div class='pageNumberContainer'>
                                     <img src='assets/images/pageSelected.png'>
