@@ -1,11 +1,11 @@
 <?php
-    class SiteResultsProvider{ 
+    class SiteResultsProvider{
         private $con;
 
         public function __construct($con) {
             $this->con = $con;
         }
-        
+
         public function getNumResults($term) {
             $query = $this->con->prepare(
                 "SELECT COUNT(*) as total
@@ -45,7 +45,7 @@
             $query->bindParam(":term", $searchTerm);
             //especifica el tipo de dato del parametro
             $query->bindParam(":fromLimit", $fromLimit, PDO::PARAM_INT);
-            $query->bindParam(":pageSize", $pageSize, PDO::PARAM_INT); 
+            $query->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
             $query->execute();
 
             $resultsHtml = "<div class='siteResults'>";
@@ -61,7 +61,7 @@
 
                 $resultsHtml .= "<div class='resultContainer'>
                                     <h3 class='title'>
-                                        <a class='result' href='$url'>
+                                        <a class='result' href='$url' data-linkId='$id'>
                                             $title
                                         </a>
                                     </h3>
