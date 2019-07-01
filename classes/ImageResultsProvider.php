@@ -67,6 +67,7 @@
                 $resultsHtml .= "<div class='gridItem'>
                                     <a href='$imageUrl'>
                                         <img src='$imageUrl'>
+                                        <span class='details'>$displayText</span>
                                     </a>
                                 </div>";
             }
