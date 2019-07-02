@@ -21,6 +21,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Welcome to Doodle</title>
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
         <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -59,11 +60,7 @@
                         </li>
 
                         <li class=" <?php echo $type == 'images' ?'active' : '' ?> ">
-                            <a href='
-                                <?php
-                                    echo "search.php?term=$term&type=images";
-                                ?>
-                            '>
+                            <a href='<?php echo "search.php?term=$term&type=images";?>'>
                                 Images
                             </a>
                         </li>
@@ -136,6 +133,8 @@
                 </div>
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
         <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
         <script type="text/javascript" src="assets/js/script.js"></script>
     </body>

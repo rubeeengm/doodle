@@ -27,6 +27,8 @@ $(document).ready(function() {
 		//ransitionDuration: 0
 		isInitLayout: false
 	});
+
+	$("[data-fancybox]").fancybox();
 });
 
 function loadImage(src, className) {
@@ -43,7 +45,8 @@ function loadImage(src, className) {
 	});
 
 	image.on("error", function() {
-
+		$("." + className).remove();
+		$.post("ajax/setBroken.php", {src: src});
 	});
 
 	image.attr("src", src);
